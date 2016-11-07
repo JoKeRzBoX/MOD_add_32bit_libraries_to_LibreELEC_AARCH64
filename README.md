@@ -24,13 +24,15 @@ you can installl them as root via apt-get install squashfs-tools
 
 1) Extract the SYSTEM file (sqhashfs image) from the original 64bit build you want to update. The zip or tar dsitributions are ideal for that but can also be extracted from the img.gz too (need to mount the img file from correct offset to access the files).
 
-2) Similarly, extract the SYSTEM file (sqhashfs image) from the ARM 32bit build you want to use the 32 bit libraries from. The zip or tar distributions are ideal for that but can also be extracted from the img.gz too (need to mount the img file from correct offset to access the files).
+2) Similarly, extract the SYSTEM file (sqhashfs image) from the ARM 32bit build you want to use the 32 bit libraries from. The zip or tar distributions are ideal for that but can also be extracted from the img.gz too (need to mount the img file from correct offset to access the files). If you want tp also have anotehr source for older lib 32 libraries ou can extract such SYSTEM (optional)
 
 3) from steps 1 and 3 above, copy the SYSTEM files to this folder renamed as per below:
 
    SYSTEM file from 64bit buld should be named: **SYSTEM_64bit**
 
    SYSTEM file from 32bit buld should be named: **SYSTEM_32bit**
+
+   (optional) SYSTME file from older 32bit build (to retrieve older version of libraries) should be named **SYSTEM_32bit_base**
 
 4) run the build script: **_sh ./build_SYSTEM_with_32bit_libs.sh_**
 

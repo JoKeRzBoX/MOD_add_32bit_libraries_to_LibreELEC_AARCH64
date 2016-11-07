@@ -1,6 +1,6 @@
 #!/bin/sh
 
-
+HAS_BASE=0
 mkdir -p ./target
 
 if [ `id -u` -ne 0 ]; then
@@ -9,12 +9,19 @@ if [ `id -u` -ne 0 ]; then
 	exit 0
 fi
 
+# Fixing ownership of folders downloaded via git
+chown -R root:root ./src/*
 # mounts the two squash fs image files
 echo "Mounting the two squash filesystems into temporary folders..."
 mkdir ./s1
 mount -t squashfs -o loop ./SYSTEM_64bit ./s1
 mkdir ./s2
 mount -t squashfs -o loop ./SYSTEM_32bit ./s2
+if [ -f ./SYSTEM_32bit_base ]; then
+	HAS_BASE=1
+	mkdir ./s3
+	mount -t squashfs -o loop ./SYSTEM_32bit_base ./s3
+fi
 
 # creates a destination folder for the combined filesystem and copies the right files to the right places
 echo "Creating the final folder..."
@@ -26,9 +33,18 @@ echo "Creatng folders to host the 32 bit libraries..."
 mkdir ./system_final/lib32
 mkdir ./system_final/usr/lib32
 echo "Copying the 32 bit libraries into final folder..."
+# First copy libs from the base distro (which should have all . older veersions of the libs)
+if [ $HAS_BASE -eq 1 ]; then
+	cp -rp ./s3/lib/* ./system_final/lib32
+	cp -rp ./s3/usr/lib/* ./system_final/usr/lib32
+	umount ./s3
+	rm -rf ./s3
+fi
+# and copy the more recenet libs on top
 cp -rp ./s2/lib/* ./system_final/lib32
 cp -rp ./s2/usr/lib/* ./system_final/usr/lib32
 umount ./s2
+
 echo "Copying the additional scripts and symbolic link to final folder..."
 cp -rp ./src/* ./system_final
 
