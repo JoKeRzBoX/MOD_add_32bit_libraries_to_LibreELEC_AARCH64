@@ -57,7 +57,7 @@ chmod 777 ./target/SYSTEM
 # creates mdsum for the file
 echo "Creating the MD5 checksum file..."
 md5sum target/SYSTEM > target/SYSTEM.md5
-mod 777 ./target/SYSTEM.md5
+chmod 777 ./target/SYSTEM.md5
 
 # clean the temp folders
 echo "Cleaning up temporary folders"
